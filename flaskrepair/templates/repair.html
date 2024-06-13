@@ -1,0 +1,49 @@
+{% extends "base.html"%}
+
+{% block title%} Σύνδεση {% endblock %}
+
+{% block content%} 
+
+<div class="row">
+    <div class="col-8">
+        <div class="content-section">
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Εισαγωγή νέου Εντύπου Τεχνικών Εργασιών</legend>            
+                    <div class="form-group">
+                        {{ form.serial.label(class="form-control-label") }}
+                        {% if form.serial.errors %}
+                            {{form.serial(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.serial.errors %}
+                                    <span> {{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.serial(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.error_description.label(class="form-control-label mt-2") }}
+                        {% if form.error_description.errors %}
+                            {{form.error_description(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.error_description.errors %}
+                                    <span> {{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.error_description(class="form-control form-control-lg") }}
+                        {% endif %}              
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-outline-info mt-4")}}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
