@@ -2,12 +2,9 @@ import secrets, os
 from flask import render_template, url_for, flash, redirect, request
 from flaskrepair import app, db, bcrypt
 from flaskrepair.forms import RegistrationForm, LoginForm, UpdateAccountForm, RepairForm
-from flaskrepair.models import User, Repair
+from flaskrepair.models import User, Repair, HardwareOption
 from flask_login import login_user, current_user, logout_user, login_required
 
-
-def create_tables():
-    db.create_all()
 
 @app.route("/")
 def home():
@@ -53,7 +50,13 @@ def login():
 def new_repair():
     form = RepairForm()
     if form.validate_on_submit():
-        flash('Η φόρμα υποβλήθηκε.', 'success')
+        repair = Repair(tel_no = form.tel_no.data, serial=form.serial.data, guarantee=form.guarantee.data, hardware=form.hardware.data,
+                        error_description=form.error_description.data, client=form.client.data, duration=form.duration.data, 
+                        hd=form.hd.data, ram=form.ram.data, graphcard=form.graphcard.data, power=form.power.data, 
+                        user_name=current_user.username, user_id=current_user.id)
+        db.session.add(repair)
+        db.session.commit()
+        flash('Το έντυπο τεχνικών εργασιών καταχωρίστηκε.', 'success')
         return redirect(url_for('home'))
     return render_template('repair.html', form=form) 
 
@@ -70,7 +73,6 @@ def save_picture(form_picture):
     form_picture.save(picture_path)
 
     return picture_fn
-
 
 @app.route("/account/", methods=['GET', 'POST'])
 @login_required

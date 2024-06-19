@@ -4,28 +4,127 @@
 
 {% block content%} 
 
-<div class="row">
+<div class="row g-3">
     <div class="col-8">
         <div class="content-section">
             <form method="POST" action="">
                 {{ form.hidden_tag() }}
                 <fieldset class="form-group">
-                    <legend class="border-bottom mb-4">Εισαγωγή νέου Εντύπου Τεχνικών Εργασιών</legend>            
-                    <div class="form-group">
-                        {{ form.serial.label(class="form-control-label") }}
-                        {% if form.serial.errors %}
-                            {{form.serial(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.serial.errors %}
-                                    <span> {{ error }}</span>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            {{ form.serial(class="form-control form-control-lg") }}
-                        {% endif %}
+                    <legend class="border-bottom mb-4">Εισαγωγή νέου Εντύπου Τεχνικών Εργασιών</legend>
+                    <div class="form-group row mb-4">                        
+                        <div class="form-group col-md-6">
+                            <label class="form-control-label mb-1">Ονοματεπώνυμο χειριστή</label>
+                            <div class="form-control form-control-lg">
+                                {{ current_user.username }}
+                            </div>       
+                        </div>
+                        <div class="form-group col-md-6">                     
+                            {{ form.tel_no.label(class="form-control-label mb-1") }}
+                            {% if form.tel_no.errors %}
+                                {{form.tel_no(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.tel_no.errors %}
+                                        <span> {{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.tel_no(class="form-control form-control-lg") }}
+                            {% endif %}
+                        </div>
                     </div>
+                    <div class="form-group row mb-4">
+                        <div class="form-group col-md-6">
+                            {{ form.client.label(class="form-control-label mb-1") }}
+                            {% if form.client.errors %}
+                                {{form.client(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.client.errors %}
+                                        <span> {{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.client(class="form-control form-control-lg") }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                        <div class="form-group col-md-4">
+                            {{ form.hardware.label(class="form-control-label mb-1") }}
+                            {% if form.hardware.errors %}
+                                {{form.hardware(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.hardware.errors %}
+                                        <span> {{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.hardware(class="form-control form-control-lg") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group row col-md-4">
+                            {{ form.serial.label(class="form-control-label mb-1") }}
+                            {% if form.serial.errors %}
+                                {{form.serial(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.serial.errors %}
+                                        <span> {{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.serial(class="form-control form-control-lg") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{ form.guarantee.label(class="form-control-label mb-1") }}
+                            {% if form.guarantee.errors %}
+                                {{form.guarantee(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.guarantee.errors %}
+                                        <span> {{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.guarantee(class="form-control form-control-lg") }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group row mb-1">
+                        <div class="form-group col-md-6">
+                            {{ form.duration.label(class="form-control-label mb-1") }}
+                            {% if form.duration.errors %}
+                                {{form.duration(class="form-check form-check-inline is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.duration.errors %}
+                                        <span> {{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.duration(class="form-check form-check-inline") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="form-control-label">Χρήση ανταλλακτικών για την επισκευή:</label>
+                            <div class="form-check form-check-inline">
+                                {{ form.hd.label(class="form-check-label") }}
+                                {{ form.hd(class="form-check-input") }}
+                            </div>
+                            <div class="form-check form-check-inline">
+                                {{ form.ram.label(class="form-check-label") }}
+                                {{ form.ram(class="form-check-input") }}
+                            </div>
+                            <div class="form-check form-check-inline">
+                                {{ form.graphcard.label(class="form-check-label") }}
+                                {{ form.graphcard(class="form-check-input") }}
+                            </div>
+                            <div class="form-check form-check-inline">
+                                {{ form.power.label(class="form-check-label") }}
+                                {{ form.power(class="form-check-input") }}
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="form-group">
-                        {{ form.error_description.label(class="form-control-label mt-2") }}
+                        {{ form.error_description.label(class="form-control-label mt-2 mb-1") }}
                         {% if form.error_description.errors %}
                             {{form.error_description(class="form-control form-control-lg is-invalid") }}
                             <div class="invalid-feedback">

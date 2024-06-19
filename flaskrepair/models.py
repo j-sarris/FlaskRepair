@@ -9,29 +9,52 @@ def load_user(user_id):
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
+    # first_name = db.Column(db.String(20), nullable=False)
+    # last_name = db.Column(db.String(20), nullable=False)
+    # phone = db.Column(db.Integer)
     email = db.Column(db.String(120), nullable=False)
     image_file = db.Column(db.String(30), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
+    # registration_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    # admin = db.Column(db.Boolean, default=False)
     repairs = db.relationship('Repair', backref='author', lazy=True)
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"
 
-
 class Repair(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    serial = db.Column(db.String(20), nullable=False)
-    guarantee = db.Column(db.Integer)
-    hardware = db.Column(db.String(20), nullable=False)
-    error = db.Column(db.Text)
+    user_name = db.Column(db.String(20), nullable=False)
+    tel_no = db.Column(db.Integer)
     client = db.Column(db.String(50))
-    duration = db.Column(db.String(50))
+    hardware = db.Column(db.String(20))
+    serial = db.Column(db.String(20))
+    guarantee = db.Column(db.Integer)
+    duration = db.Column(db.Integer)
     hd = db.Column(db.Boolean)
     ram = db.Column(db.Boolean)
     graphcard = db.Column(db.Boolean)
     power = db.Column(db.Boolean)
+    error_description = db.Column(db.Text)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
         return f"Repair('{self.id}', '{self.date_posted}', '{self.error}')"
+    
+class HardwareOption(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), unique=True, nullable=False)
+
+    def __repr__(self):
+        return f"HardwareOption('{self.name}')"
+
+class Client(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(20), nullable=False)
+    last_name = db.Column(db.String(20), nullable=False)
+    telno = db.Column(db.Integer)
+    code = db.Column(db.Integer)
+
+    def __repr__(self):
+        return f"Client('{self.id}', '{self.first_name}', '{self.last_name}')"
