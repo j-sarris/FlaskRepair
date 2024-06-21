@@ -13,7 +13,7 @@
                 {{ form.hidden_tag() }}
                 <fieldset class="form-group">
                     <legend class="border-bottom mb-4">Εγγραφή</legend>            
-                    <div class="form-group">
+                    <div class="form-group mb-2">
                         {{ form.username.label(class="form-control-label mb-1") }}
                         {% if form.username.errors %}
                             {{form.username(class="form-control form-control-lg is-invalid") }}
@@ -26,7 +26,48 @@
                             {{ form.username(class="form-control form-control-lg") }}
                         {% endif %}
                     </div>
-                    <div class="form-group">
+                    <div class="form-group row mb-2">
+                        <div class="form-group col-md-6">
+                            {{ form.name.label(class="form-control-label mb-1") }}
+                            {% if form.name.errors %}
+                                {{form.name(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.name.errors %}
+                                        <span> {{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.name(class="form-control form-control-lg") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group row col-md-6">
+                            {{ form.surname.label(class="form-control-label mb-1") }}
+                            {% if form.surname.errors %}
+                                {{form.surname(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.surname.errors %}
+                                        <span> {{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.surname(class="form-control form-control-lg") }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group mb-2">
+                        {{ form.tel_no.label(class="form-control-label mb-1") }}
+                        {% if form.tel_no.errors %}
+                            {{form.tel_no(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.tel_no.errors %}
+                                    <span> {{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.tel_no(class="form-control form-control-lg") }}
+                        {% endif %}                
+                    </div>
+                    <div class="form-group mb-2">
                         {{ form.email.label(class="form-control-label mt-2 mb-1") }}
                         {% if form.email.errors %}
                             {{form.email(class="form-control form-control-lg is-invalid") }}
@@ -39,7 +80,7 @@
                             {{ form.email(class="form-control form-control-lg") }}
                         {% endif %}                
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mb-2">
                         {{ form.password.label(class="form-control-label mt-2 mb-1") }}
                         {% if form.password.errors %}
                             {{form.password(class="form-control form-control-lg is-invalid") }}
@@ -52,7 +93,7 @@
                             {{ form.password(class="form-control form-control-lg") }}
                         {% endif %}              
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mb-2">
                         {{ form.confirm_password.label(class="form-control-label mt-2 mb-1") }}
                         {% if form.confirm_password.errors %}
                             {{form.confirm_password(class="form-control form-control-lg is-invalid") }}
@@ -64,6 +105,10 @@
                         {% else %}
                             {{ form.confirm_password(class="form-control form-control-lg") }}
                         {% endif %}
+                    </div>
+                    <div class="form-check form-check-inline mt-4">
+                        {{ form.admin.label(class="form-check-label") }}
+                        {{ form.admin(class="form-check-input") }}
                     </div>
                 </fieldset>
                 <div class="form-group">

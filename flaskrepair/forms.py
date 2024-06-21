@@ -9,14 +9,15 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Όνομα χρήστη', validators=[DataRequired(message="Το όνομα του χρήστη δεν μπορεί να είναι κενό"), Length(min=2, max=20)])
+    username = StringField('Όνομα σύνδεσης χρήστη', validators=[DataRequired(message="Το όνομα σύνδεσης του χρήστη δεν μπορεί να είναι κενό"), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email('Συμπληρώστε σωστό email της μορφής name@server')])
-    # name = StringField('Όνομα χρήστη', validators=[DataRequired(message="Το όνομα του χρήστη δεν μπορεί να είναι κενό"), Length(min=2, max=20)])
-    # surname = StringField('Όνομα χρήστη', validators=[DataRequired(message="Το όνομα του χρήστη δεν μπορεί να είναι κενό"), Length(min=2, max=20)])
-    # tel_no = TelField('Τηλέφωνο', validators=[Optional(), Length(max=15), Regexp(r'^\+?\d{0,15}$', message="Λάθος μορφή αριθμού τηλεφώνου")])
+    name = StringField('Όνομα χρήστη', validators=[DataRequired(message="Το όνομα του χρήστη δεν μπορεί να είναι κενό"), Length(min=2, max=20)])
+    surname = StringField('Επώνυμο χρήστη', validators=[DataRequired(message="Το επώνυμο του χρήστη δεν μπορεί να είναι κενό"), Length(min=2, max=20)])
+    tel_no = TelField('Τηλέφωνο', validators=[Optional(), Length(max=15), Regexp(r'^\+?\d{0,15}$', message="Λάθος μορφή αριθμού τηλεφώνου")])
     password = PasswordField('Κωδικός', validators=[DataRequired()])
     confirm_password = PasswordField('Επιβεβαίωση κωδικού',
                                     validators=[DataRequired(), EqualTo('password', message="Η επιβεβαίωση δεν είναι ίδια με τον κωδικό")]) 
+    admin = BooleanField('Διαχειριστής', validators=[Optional()])
     submit = SubmitField('Εγγραφή')
 
     def validate_username(self, username):
@@ -46,8 +47,8 @@ class LoginForm(FlaskForm):
 class RepairForm(FlaskForm):
     # username  = StringField('Σειριακός Αριθμός', validators=[DataRequired()])
     tel_no = TelField('Τηλέφωνο', validators=[Optional(), Length(max=15), Regexp(r'^\+?\d{0,15}$', message="Λάθος μορφή αριθμού τηλεφώνου")])
-    client = SelectField('Ονοματεπώνυμο υπαλλήλου', choices=[], validators=[DataRequired(message="Το όνομα του υπαλλήλου δεν μπορεί να είναι κενό")])
-    hardware = SelectField('Είδος υλικού', choices=[], validators=[DataRequired(message="Το είδος του υλικού δεν μπορεί να είναι κενό")])
+    client_id = SelectField('Ονοματεπώνυμο υπαλλήλου', validators=[DataRequired(message="Το όνομα του υπαλλήλου δεν μπορεί να είναι κενό")], coerce=int)
+    hardware_id = SelectField('Είδος υλικού', validators=[DataRequired(message="Το είδος του υλικού δεν μπορεί να είναι κενό")], coerce=int)
     serial = StringField('Σειριακός Αριθμός', validators=[Optional()])
     guarantee = SelectField('Διάρκεια εγγύησης σε μήνες', choices=[], validators=[Optional()])
     duration = RadioField('Διάρκεια επισκευής σε εργάσιμες μέρες', choices=[('1-3', '1 έως 3 μέρες'), ('4-6', '4 έως 6 μέρες'), 
@@ -61,9 +62,9 @@ class RepairForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super(RepairForm, self).__init__(*args, **kwargs)
-        self.hardware.choices = [('', 'Επιλέξτε υλικό...')] + [ (h.id, h.name) for h in HardwareOption.query.all()]
-        self.client.choices = [('', 'Επιλέξτε ονοματεπώνυμο...')] + [ (h.id, h.last_name +' '+  h.first_name ) for h in Client.query.order_by('last_name').all()]
-        self.guarantee.choices = [('', '0')] + [(h, str(h)) for h in range(1, 61)]
+        self.hardware_id.choices = [('0', 'Επιλέξτε υλικό...')] + [ (h.id, h.name) for h in HardwareOption.query.all()]
+        self.client_id.choices = [('0', 'Επιλέξτε ονοματεπώνυμο...')] + [ (h.id, h.last_name +' '+  h.first_name ) for h in Client.query.order_by('last_name').all()]
+        self.guarantee.choices = [('0', '0')] + [(h, str(h)) for h in range(1, 61)]
 
 
      

@@ -1,5 +1,5 @@
 import secrets, os
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, abort
 from flaskrepair import app, db, bcrypt
 from flaskrepair.forms import RegistrationForm, LoginForm, UpdateAccountForm, RepairForm
 from flaskrepair.models import User, Repair, HardwareOption
@@ -11,8 +11,10 @@ def home():
     return render_template("index.html")
 
 @app.route("/display")
+@login_required
 def display():
-    return render_template("display.html")
+    repairs = Repair.query.all()
+    return render_template("display.html", repairs=repairs)
 
 @app.route("/register/", methods=['GET', 'POST'])
 def register():
@@ -21,7 +23,8 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf=8')
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        user = User(username=form.username.data, first_name=form.name.data, last_name=form.surname.data, phone=form.tel_no.data, 
+                    email=form.email.data, password=hashed_password, admin=form.admin.data)
         db.session.add(user)
         db.session.commit()
         flash(f'Ο λογαριασμός για τον χρήστη {form.username.data} δημιουργήθηκε. Μπορείτε να συνδεθείτε.', 'success')
@@ -50,15 +53,15 @@ def login():
 def new_repair():
     form = RepairForm()
     if form.validate_on_submit():
-        repair = Repair(tel_no = form.tel_no.data, serial=form.serial.data, guarantee=form.guarantee.data, hardware=form.hardware.data,
-                        error_description=form.error_description.data, client=form.client.data, duration=form.duration.data, 
+        repair = Repair(tel_no = form.tel_no.data, serial=form.serial.data, guarantee=form.guarantee.data, hardware_id=form.hardware_id.data,
+                        error_description=form.error_description.data, client_id=form.client_id.data, duration=form.duration.data, 
                         hd=form.hd.data, ram=form.ram.data, graphcard=form.graphcard.data, power=form.power.data, 
                         user_name=current_user.username, user_id=current_user.id)
         db.session.add(repair)
         db.session.commit()
         flash('Το έντυπο τεχνικών εργασιών καταχωρίστηκε.', 'success')
-        return redirect(url_for('home'))
-    return render_template('repair.html', form=form) 
+        return redirect(url_for('display'))
+    return render_template('repair.html', form=form, legend = 'Εισαγωγή νέου Εντύπου Τεχνικών Εργασιών') 
 
 @app.route("/logout/")
 def logout():
@@ -92,3 +95,39 @@ def account():
         form.email.data = current_user.email
     image_file = url_for('static', filename = 'images/' + current_user.image_file) 
     return render_template('account.html', image_file=image_file, form=form)
+
+@app.route("/repair/<int:repair_id>", methods=['GET', 'POST'])
+@login_required
+def update_repair(repair_id):
+    repair = Repair.query.get_or_404(repair_id)
+    if repair.author != current_user:
+        abort(403)
+    form = RepairForm()
+    if form.validate_on_submit():
+        repair.tel_no = form.tel_no.data
+        repair.client_id = form.client_id.data
+        repair.hardware_id = form.hardware_id.data
+        repair.serial = form.serial.data
+        repair.guarantee = form.guarantee.data 
+        repair.duration = form.duration.data
+        repair.hd = form.hd.data
+        repair.ram = form.ram.data
+        repair.graphcard = form.graphcard.data
+        repair.power = form.power.data
+        repair.error_description = form.error_description.data
+        db.session.commit()
+        flash('Το έντυπο τεχνικών εργασιών ενημερώθηκε.', 'success')
+        return redirect(url_for('display'))
+    elif request.method == 'GET':
+        form.tel_no.data = repair.tel_no
+        form.client_id.data = repair.client_id
+        form.hardware_id.data = repair.hardware_id
+        form.serial.data = repair.serial
+        form.guarantee.data = repair.guarantee
+        form.duration.data = repair.duration
+        form.hd.data = repair.hd
+        form.ram.data = repair.ram
+        form.graphcard.data = repair.graphcard
+        form.power.data = repair.power  
+        form.error_description.data = repair.error_description
+    return render_template('repair.html', form=form, legend = 'Ενημέρωση Εντύπου Τεχνικών Εργασιών')
