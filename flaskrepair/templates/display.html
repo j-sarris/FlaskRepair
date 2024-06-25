@@ -6,6 +6,8 @@
 
 {% block content%} <h3 class="mt-3 text-center">Τεχνικές Εργασίες</h3>
 
+<a href="{{url_for('new_repair')}}" class="btn btn-outline-primary float-end mb-5" role="button">Προσθήκη Νέας Εργασίας</a>
+
 <table class="table table-hover mt-4">
   <thead>
     <tr>
@@ -26,7 +28,7 @@
       <tr>
         {% if repair.author == current_user or current_user.admin%}
           <th scope="row"><a href="{{ url_for('update_repair', repair_id=repair.id) }}">{{ repair.id }}</a></th>         
-          <td>{{ repair.author.username }}</td>
+          <td>{{ repair.author.last_name }} {{ repair.author.first_name }}</td>
           <td>{{ repair.tel_no }}</td>
           <td>{{ repair.client.last_name }} {{ repair.client.first_name }}</td>
           <td>{{ repair.hardware.name }}</td>

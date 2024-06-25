@@ -51,6 +51,9 @@ def login():
 @app.route("/repair/new", methods=['GET', 'POST'])
 @login_required
 def new_repair():
+
+    author = User.query.get(current_user.id)  # Fetch the author details
+
     form = RepairForm()
     if form.validate_on_submit():
         repair = Repair(tel_no = form.tel_no.data, serial=form.serial.data, guarantee=form.guarantee.data, hardware_id=form.hardware_id.data,
@@ -61,7 +64,10 @@ def new_repair():
         db.session.commit()
         flash('Το έντυπο τεχνικών εργασιών καταχωρίστηκε.', 'success')
         return redirect(url_for('display'))
-    return render_template('repair.html', form=form, legend = 'Εισαγωγή νέου Εντύπου Τεχνικών Εργασιών') 
+    elif request.method == 'GET':
+        form.tel_no.data = current_user.phone
+        form.username.data = current_user.username
+    return render_template('repair.html', form=form, legend = 'Εισαγωγή νέου Εντύπου Τεχνικών Εργασιών', author=author) 
 
 @app.route("/logout/")
 def logout():
@@ -100,8 +106,11 @@ def account():
 @login_required
 def update_repair(repair_id):
     repair = Repair.query.get_or_404(repair_id)
-    if repair.author != current_user:
+    if repair.author != current_user and not current_user.admin:
         abort(403)
+
+    author = User.query.get(repair.user_id)  # Fetch the author details
+    
     form = RepairForm()
     if form.validate_on_submit():
         repair.tel_no = form.tel_no.data
@@ -130,4 +139,15 @@ def update_repair(repair_id):
         form.graphcard.data = repair.graphcard
         form.power.data = repair.power  
         form.error_description.data = repair.error_description
-    return render_template('repair.html', form=form, legend = 'Ενημέρωση Εντύπου Τεχνικών Εργασιών')
+    return render_template('repair.html', form=form, legend = 'Ενημέρωση Εντύπου Τεχνικών Εργασιών', author=author, repair=repair)
+
+@app.route("/repair/<int:repair_id>/delete", methods=['POST'])
+@login_required
+def delete_repair(repair_id):
+    repair = Repair.query.get_or_404(repair_id)
+    if repair.author != current_user and not current_user.admin:
+        abort(403)
+    db.session.delete(repair)
+    db.session.commit()
+    flash('Η εγγραφή διαγράφηκε.', 'success')
+    return redirect(url_for('display'))

@@ -45,12 +45,12 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Σύνδεση')
 
 class RepairForm(FlaskForm):
-    # username  = StringField('Σειριακός Αριθμός', validators=[DataRequired()])
+    username  = StringField('Ονοματεπώνυμο χειριστή', validators=[Optional()])
     tel_no = TelField('Τηλέφωνο', validators=[Optional(), Length(max=15), Regexp(r'^\+?\d{0,15}$', message="Λάθος μορφή αριθμού τηλεφώνου")])
     client_id = SelectField('Ονοματεπώνυμο υπαλλήλου', validators=[DataRequired(message="Το όνομα του υπαλλήλου δεν μπορεί να είναι κενό")], coerce=int)
     hardware_id = SelectField('Είδος υλικού', validators=[DataRequired(message="Το είδος του υλικού δεν μπορεί να είναι κενό")], coerce=int)
     serial = StringField('Σειριακός Αριθμός', validators=[Optional()])
-    guarantee = SelectField('Διάρκεια εγγύησης σε μήνες', choices=[], validators=[Optional()])
+    guarantee = SelectField('Διάρκεια εγγύησης σε μήνες', validators=[Optional()], coerce=int)
     duration = RadioField('Διάρκεια επισκευής σε εργάσιμες μέρες', choices=[('1-3', '1 έως 3 μέρες'), ('4-6', '4 έως 6 μέρες'), 
                                                                             ('7-10', '7 έως 10 μέρες'), ('10+', 'Πάνω από 10 μέρες')], validators=[Optional()])
     hd = BooleanField('Σκληρός Δίσκος')  # Hard Drive

@@ -14,8 +14,8 @@
                     <div class="form-group row mb-4">                        
                         <div class="form-group col-md-6">
                             <label class="form-control-label mb-1">Ονοματεπώνυμο χειριστή</label>
-                            <div class="form-control form-control-lg">
-                                {{ current_user.last_name }} {{ current_user.first_name }}
+                            <div class="form-control form-control-lg disabled-div">
+                                {{ author.last_name }} {{ author.first_name }}
                             </div>       
                         </div>
                         <div class="form-group col-md-6">                     
@@ -139,8 +139,40 @@
                 </fieldset>
                 <div class="form-group">
                     {{ form.submit(class="btn btn-outline-info mt-4")}}
+                    {% if repair %}
+                    <!-- Delete button -->
+                        <button type="button" class="btn btn-outline-danger mt-4" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            Διαγραφή
+                        </button>
+                    {% endif %}
+                    <a href="{{url_for('display')}}" class="btn btn-light float-end mt-4" role="button">Ακύρωση</a>
                 </div>
+                <!-- Hidden input for username -->
+                {{ form.username(class="d-none") }}
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Επιβεβαίωση Διαγραφής</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Είστε σίγουροι ότι θέλετε να διαγράψετε αυτή την εγγραφή;
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ακύρωση</button>
+                {% if repair %}
+                <form method="POST" action="{{ url_for('delete_repair', repair_id=repair.id) }}">
+                    <button type="submit" class="btn btn-danger">Διαγραφή</button>
+                </form>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>

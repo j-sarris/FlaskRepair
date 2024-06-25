@@ -92,3 +92,10 @@ ul {
 list-style-position: inside;
 padding-left: 0;
 }
+
+.disabled-div {
+  background-color: #e9ecef;
+  color: #6c757d;
+  pointer-events: none; /* This makes the div non-interactive */
+  opacity: 0.65;
+}
