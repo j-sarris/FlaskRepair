@@ -1,0 +1,5 @@
+virtualenv venv 	to create your new environment (called 'venv' here)
+source venv/bin/activate 	to enter the virtual environment
+pip install -r requirements.txt
+
+python initialize_db.py

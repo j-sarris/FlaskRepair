@@ -13,7 +13,8 @@ db.create_all()
 # Creating test users
 user1 = User(username='jdi', first_name='Ιωάννης', last_name='Δημητριάδης', phone=1234567890, email='jdi@oersted.dtu.dk', admin=False)
 user1.set_password('1234')
-user2 = User(username='yannis', first_name='Γιάννης', last_name='Σαρρής', phone=3975, email='jsarris@gmail.com', admin=True)
+
+user2 = User(username='yannis', first_name='Γιάννης', last_name='Σαρρής', phone=3975, email='jsa@dtu.dk', admin=True)
 user2.set_password('1234')
 
 db.session.add(user1)
@@ -39,8 +40,8 @@ db.session.commit()
 # Creating test clients
 client1 = Client(first_name='Θεοδόσιος', last_name='Δημητρίου', telno='3746326521', code='002')
 client2 = Client(first_name='Ιωάννης', last_name='Τζαβέλας', telno='123456', code='002')
-client3 = Client(first_name='Ευάγγελος', last_name='Κουλός', telno='2658', code='004')
-client4 = Client(first_name='Γεωργία', last_name='Βερυκάκη', telno='7856', code='003')
+client3 = Client(first_name='Ευάγγελος', last_name='Ζαμπέτας', telno='2658', code='004')
+client4 = Client(first_name='Γεωργία', last_name='Χρυσικού', telno='7856', code='003')
 
 db.session.add(client1)
 db.session.add(client2)
